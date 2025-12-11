@@ -58,10 +58,12 @@ parentheses.
 (3 + 2) * 5 - 1
 
 markdown
-
+Copy code
 
 **Output**
 [(, 3, +, 2, ), *, 5, -, 1]
+
+yaml
 
 ---
 
@@ -69,7 +71,7 @@ markdown
 
 A recursive descent parser checks whether the input conforms to the following grammar:
 
-
+```text
 E → E + T | E - T | T
 T → T * F | T / F | F
 F → (E) | number | -F
@@ -80,6 +82,8 @@ The parser builds a tree that reflects operator precedence and grouping.
 
 AST for the example expression
 
+text
+Copy code
 AST:
 └─ *
    ├─ +
@@ -93,7 +97,8 @@ The evaluator computes the result by recursively evaluating the AST.
 
 Result
 
-
+Copy code
+15
 Error Handling
 The compiler detects:
 
@@ -109,15 +114,18 @@ Example
 
 Input
 
+scss
 
 3 + (4 - )
 Error
 
-
+arduino
+Copy code
 Unexpected token ')' at position 6
 Running the Program
 Compile
-
+bash
+Copy code
 javac *.java
 Run
 bash
@@ -128,9 +136,12 @@ Enter any arithmetic expression when prompted.
 Example Input and Output
 Input
 
+scss
+
 (3 + 2) * (4 - 1)
 Output
 
+makefile
 
 Tokens: [(, 3, +, 2, ), *, (, 4, -, 1, ), ]
 
