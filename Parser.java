@@ -45,7 +45,24 @@ public class Parser {
         if (check(TokenType.PLUS) || check(TokenType.MINUS)) {
             Token unary = peek();
 
-            // Detect ambiguous no-space sequences like 9--2
+            // Detect ambiguous no-space sequences like 9--2 or 8*3--3
+            if (pos >= 2) {
+                Token before = tokens.get(pos - 1);
+                Token beforeBefore = tokens.get(pos - 2);
+                
+                // Check if pattern is: NUMBER OPERATOR UNARY (like 3--2)
+                if (beforeBefore.type == TokenType.NUMBER && 
+                    (before.type == TokenType.PLUS || before.type == TokenType.MINUS ||
+                     before.type == TokenType.STAR || before.type == TokenType.SLASH)) {
+                    throw new ParseException(
+                        "Ambiguous operator sequence '" +
+                        beforeBefore.lexeme + before.lexeme + unary.lexeme +
+                        "' at position " + unary.position + ". Use parentheses or spaces for clarity."
+                    );
+                }
+            }
+            
+            // Also check immediate NUMBER before unary (like 9-2 being parsed as 9 then -2)
             if (pos >= 1) {
                 Token before = tokens.get(pos - 1);
                 if (before.type == TokenType.NUMBER) {
