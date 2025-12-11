@@ -1,4 +1,5 @@
 import java.util.*;
+
 /** Parser
  * ------
  * A recursive parser that converts a list of tokens into an AST according to
@@ -38,30 +39,68 @@ public class Parser {
         return e;
     }
 
+    // Factor — handles unary operators, numbers, parentheses
     private Expr parseFactor() throws ParseException {
-        // Only allow MINUS as unary operator (not PLUS)
-        if (match(TokenType.MINUS))
-            return new UnaryExpr(previous(), parseFactor());
 
+        if (check(TokenType.PLUS) || check(TokenType.MINUS)) {
+            Token unary = peek();
+
+            // Detect ambiguous no-space sequences like 9--2
+            if (pos >= 1) {
+                Token before = tokens.get(pos - 1);
+                if (before.type == TokenType.NUMBER) {
+                    throw new ParseException(
+                        "Ambiguous operator sequence '" +
+                        before.lexeme + unary.lexeme +
+                        "' at position " + unary.position + ". Use parentheses or spaces for clarity."
+                    );
+                }
+            }
+
+            advance();
+
+            // Detect double unary (--2, +-2)
+            if (check(TokenType.PLUS) || check(TokenType.MINUS)) {
+                Token second = peek();
+                throw new ParseException(
+                    "Unexpected unary operator sequence '" +
+                    unary.lexeme + second.lexeme +
+                    "' at position " + second.position + "."
+                );
+            }
+
+            return new UnaryExpr(unary, parseFactor());
+        }
+
+        // Number literal
         if (match(TokenType.NUMBER))
             return new NumberExpr(previous().intValue);
 
+        // Parenthesized expression
         if (match(TokenType.LPAREN)) {
-            Expr e = parseExpression();
-            if (!match(TokenType.RPAREN)) 
+            Expr inner = parseExpression();
+            if (!match(TokenType.RPAREN))
                 throw new ParseException("Missing ')' at position " + peek().position);
-            return e;
+            return inner;
         }
 
-        throw new ParseException("Unexpected token '" + peek().lexeme + "' at position " + peek().position);
+        // Unrecognized token
+        throw new ParseException(
+            "Unexpected token '" + peek().lexeme + "' at position " + peek().position
+        );
     }
 
     private boolean match(TokenType... types) {
         for (TokenType t : types) if (check(t)) { advance(); return true; }
         return false;
     }
+
     private boolean check(TokenType t) { return peek().type == t; }
+
     private Token advance() { pos++; return previous(); }
+
     private Token peek() { return tokens.get(pos); }
-    private Token previous() { return tokens.get(pos-1); }
+
+    private Token previous() { return tokens.get(pos - 1); }
+
 }
