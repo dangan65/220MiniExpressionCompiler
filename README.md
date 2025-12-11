@@ -20,7 +20,7 @@ The compiler supports:
 
 The program outputs:
 - A token list
-- Parsing result
+- Parsing result (success or failure)
 - The generated AST in text form
 - The final evaluated result
 
@@ -55,15 +55,14 @@ parentheses.
 **Example**
 
 **Input**
+```text
 (3 + 2) * 5 - 1
-
-markdown
-
+```
 
 **Output**
+```text
 [(, 3, +, 2, ), *, 5, -, 1]
-
-
+```
 
 ---
 
@@ -75,16 +74,23 @@ A recursive descent parser checks whether the input conforms to the following gr
 E → E + T | E - T | T
 T → T * F | T / F | F
 F → (E) | number | -F
+```
+
+**Parse Result**
+```text
+Success
+```
+
 Invalid expressions generate descriptive errors with precise token positions.
 
-AST Construction
+---
+
+### AST Construction
+
 The parser builds a tree that reflects operator precedence and grouping.
 
-AST for the example expression
-
-text
-
-AST:
+**AST for the example expression**
+```text
 └─ *
    ├─ +
    │  ├─ 3
@@ -92,57 +98,68 @@ AST:
    └─ -
       ├─ 4
       └─ 1
-Evaluation
+```
+
+---
+
+### Evaluation
+
 The evaluator computes the result by recursively evaluating the AST.
 
-Result
-
-
+**Result**
+```text
 15
-Error Handling
+```
+
+---
+
+## Error Handling
+
 The compiler detects:
+- Unexpected tokens
+- Missing operands
+- Misplaced operators
+- Invalid parentheses
 
-Unexpected tokens
+**Example**
 
-Missing operands
-
-Misplaced operators
-
-Invalid parentheses
-
-Example
-
-Input
-
-scss
-
+**Input**
+```text
 3 + (4 - )
-Error
+```
 
-arduino
-
+**Error**
+```text
 Unexpected token ')' at position 6
-Running the Program
-Compile
-bash
+```
 
+---
+
+## Running the Program
+
+### Compile
+```bash
 javac *.java
-Run
-bash
+```
 
+### Run
+```bash
 java MiniExpressionCompiler
+```
+
 Enter any arithmetic expression when prompted.
 
-Example Input and Output
-Input
+---
 
-scss
+## Example Input and Output
 
+**Input**
+```text
 (3 + 2) * (4 - 1)
-Output
+```
 
-makefile
-
+**Output**
+```text
 Tokens: [(, 3, +, 2, ), *, (, 4, -, 1, ), ]
 
 AST:
@@ -155,13 +172,14 @@ AST:
       └─ 1
 
 Result: 15
-What This Project Demonstrates
-Compiler pipeline fundamentals (lexing → parsing → AST → evaluation)
+```
 
-Recursive descent parsing
+---
 
-Operator precedence handling
+## What This Project Demonstrates
 
-Tree-based program representation
-
-Robust error reporting with position tracking
+- Compiler pipeline fundamentals (lexing → parsing → AST → evaluation)
+- Recursive descent parsing
+- Operator precedence handling
+- Tree-based program representation
+- Robust error reporting with position tracking
