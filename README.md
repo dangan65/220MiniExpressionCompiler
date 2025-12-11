@@ -1,60 +1,90 @@
-Mini Expression Compiler
+# Mini Expression Compiler
 
-This project implements a simple arithmetic expression compiler that processes an input string through the core stages of compilation: tokenization, parsing, AST construction, and evaluation. The program demonstrates how compilers interpret and evaluate expressions based on defined grammar rules.
+A Java-based arithmetic expression compiler that demonstrates the core stages of
+compilation: **tokenization**, **parsing**, **AST construction**, and **evaluation**.
 
-Overview
+The project uses a **recursive descent parser** to enforce operator precedence and
+build a structured **Abstract Syntax Tree (AST)**, which is then evaluated to
+produce a final result.
+
+---
+
+## Overview
 
 The compiler supports:
--Integer numbers
--Binary operators: +, -, *, /
--Parentheses
--Unary minus (e.g., -3)
--Error detection with clear messages
+- Integer numbers
+- Binary operators: `+`, `-`, `*`, `/`
+- Parentheses
+- Unary minus (e.g., `-3`)
+- Error detection with clear, descriptive messages
 
 The program outputs:
--A token list
--Parsing result
--The generated AST in text form
--The final evaluated result
+- A token list
+- Parsing result
+- The generated AST in text form
+- The final evaluated result
 
-Project Structure
-MiniExpressionCompiler.java   Main driver
-Lexer.java                    Tokenizer
-Parser.java                   Recursive descent parser
-Expr.java                     Base class for expressions
-NumberExpr.java               Numeric literal node
-UnaryExpr.java                Unary operator node
-BinaryExpr.java               Binary operator node
-Evaluator.java                AST evaluator
-AstPrinter.java               Tree printer
-Token.java                    Token definition
-TokenType.java                Token types
-ParseException.java           Error handling
+---
 
-========================================================================================
-Features
-Tokenization
+## Project Structure
 
-The lexer converts the input string into tokens such as numbers, operators, and parentheses.
-Example:
-Input: (3 + 2) * 5 - 1
-Output: [(, 3, +, 2, ), *, 5, -, 1]
+| File | Description |
+|-----|-------------|
+| `MiniExpressionCompiler.java` | Main driver |
+| `Lexer.java` | Tokenizer |
+| `Parser.java` | Recursive descent parser |
+| `Expr.java` | Base class for expressions |
+| `NumberExpr.java` | Numeric literal node |
+| `UnaryExpr.java` | Unary operator node |
+| `BinaryExpr.java` | Binary operator node |
+| `Evaluator.java` | AST evaluator |
+| `AstPrinter.java` | Tree printer |
+| `Token.java` | Token definition |
+| `TokenType.java` | Token types |
+| `ParseException.java` | Error handling |
 
-Parsing
-A recursive descent parser checks whether the input conforms to this grammar:
+---
 
+## Features
+
+### Tokenization
+
+The lexer converts the input string into tokens such as numbers, operators, and
+parentheses.
+
+**Example**
+
+**Input**
+(3 + 2) * 5 - 1
+
+markdown
+Copy code
+
+**Output**
+[(, 3, +, 2, ), *, 5, -, 1]
+
+yaml
+Copy code
+
+---
+
+### Parsing
+
+A recursive descent parser checks whether the input conforms to the following grammar:
+
+```text
 E → E + T | E - T | T
 T → T * F | T / F | F
 F → (E) | number | -F
+Invalid expressions generate descriptive errors with precise token positions.
 
-
-Invalid expressions generate descriptive errors with token positions.
 AST Construction
-
 The parser builds a tree that reflects operator precedence and grouping.
 
-AST for the example expression:
+AST for the example expression
 
+text
+Copy code
 AST:
 └─ *
    ├─ +
@@ -63,38 +93,57 @@ AST:
    └─ -
       ├─ 4
       └─ 1
-
 Evaluation
 The evaluator computes the result by recursively evaluating the AST.
-Result: 15
 
+Result
+
+Copy code
+15
 Error Handling
 The compiler detects:
--Unexpected tokens
--Missing operands
--Misplaced operators
--Invalid parentheses
 
-Example:
+Unexpected tokens
 
+Missing operands
+
+Misplaced operators
+
+Invalid parentheses
+
+Example
+
+Input
+
+scss
+Copy code
 3 + (4 - )
-Error: Unexpected token ')' at position 6
+Error
 
+arduino
+Copy code
+Unexpected token ')' at position 6
 Running the Program
-Compile:
+Compile
+bash
+Copy code
 javac *.java
-
-Run:
+Run
+bash
+Copy code
 java MiniExpressionCompiler
-
 Enter any arithmetic expression when prompted.
 
 Example Input and Output
+Input
 
-Input:
-Enter expression: (3 + 2) * (4 - 1)
+scss
+Copy code
+(3 + 2) * (4 - 1)
+Output
 
-Output:
+makefile
+Copy code
 Tokens: [(, 3, +, 2, ), *, (, 4, -, 1, ), ]
 
 AST:
@@ -107,3 +156,13 @@ AST:
       └─ 1
 
 Result: 15
+What This Project Demonstrates
+Compiler pipeline fundamentals (lexing → parsing → AST → evaluation)
+
+Recursive descent parsing
+
+Operator precedence handling
+
+Tree-based program representation
+
+Robust error reporting with position tracking
