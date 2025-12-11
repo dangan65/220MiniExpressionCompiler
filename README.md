@@ -58,7 +58,7 @@ parentheses.
 (3 + 2) * 5 - 1
 
 markdown
-Copy code
+
 
 **Output**
 [(, 3, +, 2, ), *, 5, -, 1]
@@ -83,7 +83,7 @@ The parser builds a tree that reflects operator precedence and grouping.
 AST for the example expression
 
 text
-Copy code
+
 AST:
 └─ *
    ├─ +
@@ -97,7 +97,7 @@ The evaluator computes the result by recursively evaluating the AST.
 
 Result
 
-Copy code
+
 15
 Error Handling
 The compiler detects:
@@ -120,12 +120,12 @@ scss
 Error
 
 arduino
-Copy code
+
 Unexpected token ')' at position 6
 Running the Program
 Compile
 bash
-Copy code
+
 javac *.java
 Run
 bash
